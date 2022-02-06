@@ -1,2 +1,2 @@
 # paquita-boutique
-Ecommerce website build with React
+Ecommerce website built with React
