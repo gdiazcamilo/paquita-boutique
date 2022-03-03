@@ -1,5 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD-sLfv2pw69_Brl7i5sFl36xtkk_zNmTU",
@@ -13,8 +21,56 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const authorizer = getAuth();
+export const firestore = getFirestore();
 
 const googleProvider = new GoogleAuthProvider();
 
 export const signInWithGooglePopUp = () =>
   signInWithPopup(authorizer, googleProvider);
+
+export const saveUser = async (userAuth, additionalData) => {
+  if (!userAuth) {
+    return null;
+  }
+
+  const userRef = doc(firestore, "users", userAuth.uid);
+  const userInDb = await getDoc(userRef);
+  if (!userInDb.exists()) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+    try {
+      throw "error creating user";
+
+      await setDoc(userRef, {
+        displayName,
+        email,
+        createdAt,
+        ...additionalData,
+      });
+
+      return userRef;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+};
+
+export const getUser = async () => {
+  const specificUserQuery = doc(firestore, "users", "Icj0gbfklh61wa3ARgmb");
+  console.log(specificUserQuery);
+  const user = await getDoc(specificUserQuery);
+  console.log(user);
+  console.log(user.data());
+
+  const allUsersQuery = collection(firestore, "users");
+  const allUsers = await getDocs(allUsersQuery);
+  allUsers.forEach((u) => console.log(u.data()));
+
+  const specificCartItemQuery = doc(
+    firestore,
+    "users/Icj0gbfklh61wa3ARgmb/cartItems/16bvKwgsB72ZY7Fe9OP2"
+  );
+  const cartItem = await getDoc(specificCartItemQuery);
+  console.log(cartItem.data());
+};

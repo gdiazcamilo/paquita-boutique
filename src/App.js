@@ -7,7 +7,8 @@ import { HomePage } from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
 import { Header } from "./components/header/header.component";
 import { SignUpAndSignIn } from "./pages/sign-up-and-sign-in/sign-up-and-sign-in.component";
-import { authorizer } from "./firebase/firebase.utils";
+import { authorizer, firestore, saveUser } from "./firebase/firebase.utils";
+import { onSnapshot } from "firebase/firestore";
 
 class App extends React.Component {
   constructor() {
@@ -21,9 +22,28 @@ class App extends React.Component {
   unsubscribeFromAuthChanged = null;
 
   componentDidMount() {
-    this.unsubscribeFromAuthChanged = authorizer.onAuthStateChanged((user) => {
-      this.setState({ currentUser: user });
-    });
+    this.unsubscribeFromAuthChanged = authorizer.onAuthStateChanged(
+      async (userAuth) => {
+        if (!userAuth) {
+          this.setState({ currentUser: null });
+          return;
+        }
+
+        const userRef = await saveUser(userAuth);
+        if (!userRef) {
+          this.setState({ currentUser: null });
+          return;
+        }
+
+        onSnapshot(userRef, (snapshot) => {
+          this.setState({
+            currentUser: { id: userRef.id, ...snapshot.data() },
+          });
+        });
+      }
+    );
+
+    // getUser();
   }
 
   componentWillUnmount() {
