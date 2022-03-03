@@ -39,8 +39,6 @@ export const saveUser = async (userAuth, additionalData) => {
     const { displayName, email } = userAuth;
     const createdAt = new Date();
     try {
-      throw "error creating user";
-
       await setDoc(userRef, {
         displayName,
         email,

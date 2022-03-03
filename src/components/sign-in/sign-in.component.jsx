@@ -3,7 +3,7 @@ import React from "react";
 import "./sign-in.styles.scss";
 
 import { FormInput } from "../form-input/form-input.component";
-import { CustomButton } from "../custom-button/custom-buttom.component";
+import { CustomButton } from "../custom-button/custom-button.component";
 
 import { signInWithGooglePopUp } from "../../firebase/firebase.utils";
 
