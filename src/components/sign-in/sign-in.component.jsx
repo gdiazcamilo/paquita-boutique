@@ -5,7 +5,11 @@ import "./sign-in.styles.scss";
 import { FormInput } from "../form-input/form-input.component";
 import { CustomButton } from "../custom-button/custom-button.component";
 
-import { signInWithGooglePopUp } from "../../firebase/firebase.utils";
+import {
+  authorizer,
+  signInWithGooglePopUp,
+} from "../../firebase/firebase.utils";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 class SignIn extends React.Component {
   constructor() {
@@ -21,10 +25,17 @@ class SignIn extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
 
-    this.setState({ email: "", password: "" });
+    const { email, password } = this.state;
+
+    try {
+      await signInWithEmailAndPassword(authorizer, email, password);
+      this.setState({ email: "", password: "" });
+    } catch (error) {
+      alert("wrong email or password");
+    }
   };
 
   render() {

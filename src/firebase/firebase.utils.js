@@ -35,22 +35,25 @@ export const saveUser = async (userAuth, additionalData) => {
 
   const userRef = doc(firestore, "users", userAuth.uid);
   const userInDb = await getDoc(userRef);
-  if (!userInDb.exists()) {
-    const { displayName, email } = userAuth;
-    const createdAt = new Date();
-    try {
-      await setDoc(userRef, {
-        displayName,
-        email,
-        createdAt,
-        ...additionalData,
-      });
 
-      return userRef;
-    } catch (error) {
-      console.log(error);
-      return null;
-    }
+  if (userInDb.exists()) {
+    return userRef;
+  }
+
+  const { displayName, email } = userAuth;
+  const createdAt = new Date();
+  try {
+    await setDoc(userRef, {
+      displayName,
+      email,
+      createdAt,
+      ...additionalData,
+    });
+
+    return userRef;
+  } catch (error) {
+    console.log(error);
+    return null;
   }
 };
 
