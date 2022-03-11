@@ -1,12 +1,15 @@
 import React from "react";
-import { connect } from "react-redux";
 
-import "./header.styles.scss";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+
+import { authorizer } from "../../firebase/firebase.utils";
+
+import CartDropdown from "../cart-dropdown/cart-dropdown.component";
+import CartIcon from "../cart-icon/cart-icon.component";
 import Logo from "./crown.svg";
 // import { ReactComponent as Logo } from "./crown.svg";
-
-import { Link } from "react-router-dom";
-import { authorizer } from "../../firebase/firebase.utils";
+import "./header.styles.scss";
 
 const Header = ({ currentUser }) => {
   function signInOption() {
@@ -39,7 +42,9 @@ const Header = ({ currentUser }) => {
           CONTACT
         </Link>
         {signInOption()}
+        <CartIcon />
       </div>
+      <CartDropdown />
     </div>
   );
 };
