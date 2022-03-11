@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import "./header.styles.scss";
 import Logo from "./crown.svg";
@@ -7,7 +8,7 @@ import Logo from "./crown.svg";
 import { Link } from "react-router-dom";
 import { authorizer } from "../../firebase/firebase.utils";
 
-export const Header = ({ currentUser }) => {
+const Header = ({ currentUser }) => {
   function signInOption() {
     if (currentUser) {
       return (
@@ -42,3 +43,8 @@ export const Header = ({ currentUser }) => {
     </div>
   );
 };
+
+const mapStateToProps = (state) => ({
+  currentUser: state.user.currentUser,
+});
+export default connect(mapStateToProps, null)(Header);

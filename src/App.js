@@ -1,46 +1,39 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Routes, Route } from "react-router-dom";
-
+import { setCurrentUser } from "./redux/user/user.actions";
 import "./App.css";
 
 import { HomePage } from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
-import { Header } from "./components/header/header.component";
+import Header from "./components/header/header.component";
 import { SignUpAndSignIn } from "./pages/sign-up-and-sign-in/sign-up-and-sign-in.component";
 import { authorizer, saveUser } from "./firebase/firebase.utils";
 import { onSnapshot } from "firebase/firestore";
 
 class App extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      currentUser: null,
-    };
-  }
-
   unsubscribeFromAuthChanged = null;
 
   componentDidMount() {
+    const { setCurrentUser } = this.props;
+
     this.unsubscribeFromAuthChanged = authorizer.onAuthStateChanged(
       async (userAuth) => {
-        console.log("start onAuthStateChanged");
-        console.log(userAuth);
         if (!userAuth) {
-          this.setState({ currentUser: null });
+          setCurrentUser(null);
           return;
         }
 
         const userRef = await saveUser(userAuth);
         if (!userRef) {
-          this.setState({ currentUser: null });
+          setCurrentUser(null);
           return;
         }
 
         onSnapshot(userRef, (snapshot) => {
-          this.setState({
-            currentUser: { id: userRef.id, ...snapshot.data() },
-          });
+          console.log("snapshopt data");
+          console.log(snapshot.data());
+          setCurrentUser({ id: userRef.id, ...snapshot.data() });
         });
       }
     );
@@ -53,7 +46,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header currentUser={this.state.currentUser} />
+        <Header />
         <Routes>
           <Route path='/sign-in' element={<SignUpAndSignIn />} />
           <Route path='/' element={<HomePage />} />
@@ -64,4 +57,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default connect(null, { setCurrentUser })(App);
