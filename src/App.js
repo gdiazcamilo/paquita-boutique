@@ -1,15 +1,18 @@
 import React from "react";
-import { connect } from "react-redux";
-import { Routes, Route } from "react-router-dom";
-import { setCurrentUser } from "./redux/user/user.actions";
-import "./App.css";
 
-import { HomePage } from "./pages/homepage/homepage.component";
+import { connect } from "react-redux";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { onSnapshot } from "firebase/firestore";
+
+import { setCurrentUser } from "./redux/user/user.actions";
+import { authorizer, saveUser } from "./firebase/firebase.utils";
+
 import ShopPage from "./pages/shop/shop.component";
 import Header from "./components/header/header.component";
+import { HomePage } from "./pages/homepage/homepage.component";
 import { SignUpAndSignIn } from "./pages/sign-up-and-sign-in/sign-up-and-sign-in.component";
-import { authorizer, saveUser } from "./firebase/firebase.utils";
-import { onSnapshot } from "firebase/firestore";
+
+import "./App.css";
 
 class App extends React.Component {
   unsubscribeFromAuthChanged = null;
@@ -48,7 +51,12 @@ class App extends React.Component {
       <div>
         <Header />
         <Routes>
-          <Route path='/sign-in' element={<SignUpAndSignIn />} />
+          <Route
+            path='/sign-in'
+            element={
+              this.props.currentUser ? <Navigate to='/' /> : <SignUpAndSignIn />
+            }
+          />
           <Route path='/' element={<HomePage />} />
           <Route path='/shop' element={<ShopPage />} />
         </Routes>
@@ -57,4 +65,6 @@ class App extends React.Component {
   }
 }
 
-export default connect(null, { setCurrentUser })(App);
+export default connect(({ user }) => ({ currentUser: user.currentUser }), {
+  setCurrentUser,
+})(App);
