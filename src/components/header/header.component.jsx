@@ -11,7 +11,7 @@ import Logo from "./crown.svg";
 // import { ReactComponent as Logo } from "./crown.svg";
 import "./header.styles.scss";
 
-const Header = ({ currentUser }) => {
+const Header = ({ currentUser, visible }) => {
   function signInOption() {
     if (currentUser) {
       return (
@@ -44,12 +44,14 @@ const Header = ({ currentUser }) => {
         {signInOption()}
         <CartIcon />
       </div>
-      <CartDropdown />
+      {visible ? <CartDropdown /> : null}
     </div>
   );
 };
 
-const mapStateToProps = (state) => ({
-  currentUser: state.user.currentUser,
+const mapStateToProps = ({ user: { currentUser }, cart: { visible } }) => ({
+  currentUser,
+  visible,
 });
+
 export default connect(mapStateToProps, null)(Header);
