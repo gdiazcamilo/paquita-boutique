@@ -3,6 +3,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
+import { selectCartVisible } from "../../redux/cart/cart.selectors";
+import { selectCurrentUser } from "../../redux/user/user.selectors";
 import { authorizer } from "../../firebase/firebase.utils";
 
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
@@ -10,6 +12,7 @@ import CartIcon from "../cart-icon/cart-icon.component";
 import Logo from "./crown.svg";
 // import { ReactComponent as Logo } from "./crown.svg";
 import "./header.styles.scss";
+import { createStructuredSelector } from "reselect";
 
 const Header = ({ currentUser, visible }) => {
   function signInOption() {
@@ -49,9 +52,9 @@ const Header = ({ currentUser, visible }) => {
   );
 };
 
-const mapStateToProps = ({ user: { currentUser }, cart: { visible } }) => ({
-  currentUser,
-  visible,
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+  visible: selectCartVisible,
 });
 
 export default connect(mapStateToProps, null)(Header);
