@@ -10,6 +10,7 @@ import { setCurrentUser } from "./redux/user/user.actions";
 import { authorizer, saveUser } from "./firebase/firebase.utils";
 
 import ShopPage from "./pages/shop/shop.component";
+import CheckoutPage from "./pages/checkout/checkout.component";
 import Header from "./components/header/header.component";
 import { HomePage } from "./pages/homepage/homepage.component";
 import { SignUpAndSignIn } from "./pages/sign-up-and-sign-in/sign-up-and-sign-in.component";
@@ -61,6 +62,7 @@ class App extends React.Component {
           />
           <Route path='/' element={<HomePage />} />
           <Route path='/shop' element={<ShopPage />} />
+          <Route path='/checkout' element={<CheckoutPage />} />
         </Routes>
       </div>
     );
