@@ -2,9 +2,14 @@ import { createSelector } from "reselect";
 
 const selectCatalog = (state) => state.catalog;
 
-export const selectCatalogCollections = createSelector(
+const selectCatalogCollections = createSelector(
   [selectCatalog],
   (catalog) => catalog.collections
+);
+
+export const selectCatalogCollectionList = createSelector(
+  [selectCatalogCollections],
+  (collections) => Object.values(collections)
 );
 
 export const selectCollection = (collectionName) =>
