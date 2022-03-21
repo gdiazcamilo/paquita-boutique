@@ -16,6 +16,7 @@ import { HomePage } from "./pages/homepage/homepage.component";
 import { SignUpAndSignIn } from "./pages/sign-up-and-sign-in/sign-up-and-sign-in.component";
 
 import "./App.css";
+import CollectionPage from "./pages/collection/collection.component";
 
 class App extends React.Component {
   unsubscribeFromAuthChanged = null;
@@ -61,7 +62,11 @@ class App extends React.Component {
             }
           />
           <Route path='/' element={<HomePage />} />
-          <Route path='/shop' element={<ShopPage />} />
+          <Route path='/shop'>
+            <Route path='' element={<ShopPage />} />
+            <Route path=':collectionName' element={<CollectionPage />} />
+          </Route>
+
           <Route path='/checkout' element={<CheckoutPage />} />
         </Routes>
       </div>

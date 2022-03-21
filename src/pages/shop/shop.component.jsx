@@ -1,21 +1,14 @@
 import React from "react";
-import { connect } from "react-redux";
 
-import { CollectionPreview } from "../../components/collection-preview/collection-preview.component.jsx";
+import CollectionsOverview from "../../components/collections-overview/collections-overview.component";
 
 import "./shop.styles.scss";
 
-const ShopPage = ({ sections }) => (
+const ShopPage = () => (
   <div className='shop-page'>
     <h1>SHOP PAGE</h1>
-    {sections.map(({ id, ...otherProps }) => (
-      <CollectionPreview key={id} {...otherProps}></CollectionPreview>
-    ))}
+    <CollectionsOverview />
   </div>
 );
 
-const mapStateToProps = (state) => ({
-  sections: state.catalog.sections,
-});
-
-export default connect(mapStateToProps)(ShopPage);
+export default ShopPage;
