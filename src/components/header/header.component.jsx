@@ -9,7 +9,7 @@ import { authorizer } from "../../firebase/firebase.utils";
 
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
 import CartIcon from "../cart-icon/cart-icon.component";
-import Logo from "./crown.svg";
+import Logo from "./paquita.logo.jpg";
 // import { ReactComponent as Logo } from "./crown.svg";
 import "./header.styles.scss";
 import { createStructuredSelector } from "reselect";
