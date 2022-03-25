@@ -1,7 +1,6 @@
 import React from "react";
-
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { createStructuredSelector } from "reselect";
 
 import { selectCartVisible } from "../../redux/cart/cart.selectors";
 import { selectCurrentUser } from "../../redux/user/user.selectors";
@@ -11,44 +10,42 @@ import CartDropdown from "../cart-dropdown/cart-dropdown.component";
 import CartIcon from "../cart-icon/cart-icon.component";
 import Logo from "./paquita.logo.jpg";
 // import { ReactComponent as Logo } from "./crown.svg";
-import "./header.styles.scss";
-import { createStructuredSelector } from "reselect";
+
+import {
+  HeaderContainer,
+  LogoContainer,
+  LogoImage,
+  OptionsContainer,
+  LinkOption,
+} from "./header.styles";
 
 const Header = ({ currentUser, visible }) => {
   function signInOption() {
     if (currentUser) {
       return (
-        <div className='option' onClick={() => authorizer.signOut()}>
+        <LinkOption as='div' onClick={() => authorizer.signOut()}>
           SIGN OUT
-        </div>
+        </LinkOption>
       );
     } else {
-      return (
-        <Link className='option' to='/sign-in'>
-          SIGN IN
-        </Link>
-      );
+      return <LinkOption to='/sign-in'>SIGN IN</LinkOption>;
     }
   }
 
   return (
-    <div className='header'>
-      <Link className='logo-container' to='/'>
-        <img src={Logo} alt='Logo' className='logo' />
+    <HeaderContainer>
+      <LogoContainer to='/'>
+        <LogoImage src={Logo} alt='Logo' />
         {/* <Logo className='logo' /> */}
-      </Link>
-      <div className='options'>
-        <Link className='option' to='/shop'>
-          SHOP
-        </Link>
-        <Link className='option' to='/'>
-          CONTACT
-        </Link>
+      </LogoContainer>
+      <OptionsContainer>
+        <LinkOption to='/shop'>SHOP</LinkOption>
+        <LinkOption to='/'>CONTACT</LinkOption>
         {signInOption()}
         <CartIcon />
-      </div>
+      </OptionsContainer>
       {visible ? <CartDropdown /> : null}
-    </div>
+    </HeaderContainer>
   );
 };
 
