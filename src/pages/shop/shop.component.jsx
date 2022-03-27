@@ -2,13 +2,13 @@ import React from "react";
 
 import CollectionsOverview from "../../components/collections-overview/collections-overview.component";
 
-import "./shop.styles.scss";
+import { ShopPageContainer } from "./shop.styles";
 
 const ShopPage = () => (
-  <div className='shop-page'>
+  <ShopPageContainer>
     <h1>SHOP PAGE</h1>
     <CollectionsOverview />
-  </div>
+  </ShopPageContainer>
 );
 
 export default ShopPage;

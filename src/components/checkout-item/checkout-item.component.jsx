@@ -7,9 +7,15 @@ import {
   decreaseItemQuantity,
 } from "../../redux/cart/cart.actions";
 
-import "./checkout-item.styles.scss";
+import {
+  CheckoutItemContainer,
+  ImageContainer,
+  Text,
+  QuantityContainer,
+  RemoveButton,
+} from "./checkout-item.styles";
 
-const UNICODE_EQUIS = "&#10005";
+const UNICODE_X = "&#10005";
 const UNICODE_DOWN_ARROW = "&#10094";
 const UNICODE_UP_ARROW = "&#10095";
 
@@ -21,31 +27,28 @@ const CheckoutItem = ({
 }) => {
   const { id, imageUrl, name, quantity, price } = cartItem;
   return (
-    <div className='checkout-item'>
-      <div className='image-container'>
+    <CheckoutItemContainer>
+      <ImageContainer>
         <img src={imageUrl} alt='item' />
-      </div>
-      <span className='name'>{name}</span>
-      <span className='quantity'>
+      </ImageContainer>
+      <Text>{name}</Text>
+      <QuantityContainer>
         <div
-          className='arrow'
           onClick={() => decreaseItemQuantity(id)}
           dangerouslySetInnerHTML={{ __html: UNICODE_DOWN_ARROW }}
         ></div>
-        <span className='value'>{quantity}</span>
+        <span>{quantity}</span>
         <div
-          className='arrow'
           onClick={() => addItem(cartItem)}
           dangerouslySetInnerHTML={{ __html: UNICODE_UP_ARROW }}
         ></div>
-      </span>
-      <span className='price'>${price}</span>
-      <span
-        className='remove-button'
+      </QuantityContainer>
+      <Text>${price}</Text>
+      <RemoveButton
         onClick={() => removeItem(id)}
-        dangerouslySetInnerHTML={{ __html: UNICODE_EQUIS }}
-      ></span>
-    </div>
+        dangerouslySetInnerHTML={{ __html: UNICODE_X }}
+      />
+    </CheckoutItemContainer>
   );
 };
 

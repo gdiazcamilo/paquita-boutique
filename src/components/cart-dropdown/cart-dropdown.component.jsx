@@ -5,26 +5,35 @@ import { useNavigate } from "react-router-dom";
 
 import { toggleCartPreview } from "../../redux/cart/cart.actions";
 import { selectCartItems } from "../../redux/cart/cart.selectors";
+
 import CartDropdownItem from "../cart-dropdown-item/cart-dropdown-item.component";
 import { CustomButton } from "../custom-button/custom-button.component";
 
-import "./cart-dropdown.styles.scss";
+import {
+  CartDropdownContainer,
+  CartItemListContainer,
+  EmptyCartText,
+} from "./cart-dropdown.styles";
 
 const CartDropdown = ({ cartItems, dispatch }) => {
   const navigate = useNavigate();
   console.log(toggleCartPreview);
 
+  const renderCartItems = (cartItems) => {
+    if (cartItems.length) {
+      return cartItems.map((item) => (
+        <CartDropdownItem key={item.id} item={item} />
+      ));
+    } else {
+      return <EmptyCartText>Your cart is empty</EmptyCartText>;
+    }
+  };
+
   return (
-    <div className='cart-dropdown'>
-      <div className='cart-item-list'>
-        {cartItems.length ? (
-          cartItems.map((item) => (
-            <CartDropdownItem key={item.id} item={item} />
-          ))
-        ) : (
-          <span className='empty-cart'>Your cart is empty</span>
-        )}
-      </div>
+    <CartDropdownContainer>
+      <CartItemListContainer>
+        {renderCartItems(cartItems)}
+      </CartItemListContainer>
       <CustomButton
         onClick={() => {
           navigate("/checkout");
@@ -33,7 +42,7 @@ const CartDropdown = ({ cartItems, dispatch }) => {
       >
         SHOW ALL
       </CustomButton>
-    </div>
+    </CartDropdownContainer>
   );
 };
 
