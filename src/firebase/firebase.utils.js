@@ -7,6 +7,7 @@ import {
   getDoc,
   doc,
   setDoc,
+  writeBatch,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -57,7 +58,20 @@ export const saveUser = async (userAuth, additionalData) => {
   }
 };
 
-export const getUser = async () => {
+export const createCollectionAndDocuments = async (collectionKey, items) => {
+  const newCollectionRef = collection(firestore, collectionKey);
+
+  const batch = writeBatch(firestore);
+
+  items.forEach((item) => {
+    const newDocRef = doc(newCollectionRef);
+    batch.set(newDocRef, item);
+  });
+
+  await batch.commit();
+};
+
+const getUser = async () => {
   const specificUserQuery = doc(firestore, "users", "Icj0gbfklh61wa3ARgmb");
   console.log(specificUserQuery);
   const user = await getDoc(specificUserQuery);
