@@ -7,7 +7,12 @@ import { createStructuredSelector } from "reselect";
 
 import { selectCurrentUser } from "./redux/user/user.selectors";
 import { setCurrentUser } from "./redux/user/user.actions";
-import { authorizer, saveUser } from "./firebase/firebase.utils";
+import { selectCatalogCollectionList } from "./redux/catalog/catalog.selectors";
+import {
+  authorizer,
+  saveUser,
+  createCollectionAndDocuments,
+} from "./firebase/firebase.utils";
 
 import ShopPage from "./pages/shop/shop.component";
 import CheckoutPage from "./pages/checkout/checkout.component";
@@ -22,7 +27,12 @@ class App extends React.Component {
   unsubscribeFromAuthChanged = null;
 
   componentDidMount() {
-    const { setCurrentUser } = this.props;
+    const { setCurrentUser, collections } = this.props;
+
+    createCollectionAndDocuments(
+      "collections",
+      collections.map(({ title, items }) => ({ title, items }))
+    );
 
     this.unsubscribeFromAuthChanged = authorizer.onAuthStateChanged(
       async (userAuth) => {
@@ -76,5 +86,6 @@ class App extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
+  collections: selectCatalogCollectionList,
 });
 export default connect(mapStateToProps, { setCurrentUser })(App);
