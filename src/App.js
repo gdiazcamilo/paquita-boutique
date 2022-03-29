@@ -62,11 +62,7 @@ class App extends React.Component {
             }
           />
           <Route path='/' element={<HomePage />} />
-          <Route path='/shop'>
-            <Route path='' element={<ShopPage />} />
-            <Route path=':collectionName' element={<CollectionPage />} />
-          </Route>
-
+          <Route path='/shop/*' element={<ShopPage />} />
           <Route path='/checkout' element={<CheckoutPage />} />
         </Routes>
       </div>
