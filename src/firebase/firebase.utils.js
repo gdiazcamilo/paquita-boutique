@@ -7,7 +7,6 @@ import {
   getDoc,
   doc,
   setDoc,
-  writeBatch,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -56,6 +55,26 @@ export const saveUser = async (userAuth, additionalData) => {
     console.log(error);
     return null;
   }
+};
+
+export const convertCollectionsSnapshotToObject = (collectionsSnapshot) => {
+  const collectionsList = collectionsSnapshot.docs.map((collection) => {
+    const { title, imageUrl, items, size } = collection.data();
+    console.log(title);
+    return {
+      id: collection.id,
+      title: title,
+      items: items,
+      linkUrl: `/shop/${encodeURI(title.toLowerCase())}`,
+      imageUrl: imageUrl,
+      size: size,
+    };
+  });
+
+  return collectionsList.reduce((accumulator, currentCollection) => {
+    accumulator[currentCollection.title.toLowerCase()] = currentCollection;
+    return accumulator;
+  }, {});
 };
 
 const getUser = async () => {

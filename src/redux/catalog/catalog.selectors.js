@@ -9,7 +9,8 @@ const selectCatalogCollections = createSelector(
 
 export const selectCatalogCollectionList = createSelector(
   [selectCatalogCollections],
-  (collections) => Object.values(collections)
+  (collections) =>
+    Object.values(collections).sort((a, b) => (a.size === undefined ? -1 : 1))
 );
 
 export const selectCollection = (collectionName) =>
