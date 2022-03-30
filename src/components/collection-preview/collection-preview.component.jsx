@@ -8,10 +8,10 @@ import {
   CollectionPreviewContainer,
 } from "./collection-preview.styles";
 
-export const CollectionPreview = ({ title, items }) => {
+export const CollectionPreview = ({ title, linkUrl, items }) => {
   return (
     <CollectionPreviewContainer>
-      <Title>{title.toUpperCase()}</Title>
+      <Title to={linkUrl}>{title.toUpperCase()}</Title>
       <PreviewContainer>
         {items
           .filter((i, idx) => idx < 4)
