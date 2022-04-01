@@ -18,14 +18,25 @@ import { authorizer, saveUser } from "./firebase/firebase.utils";
 import ShopPage from "./pages/shop/shop.component";
 import CheckoutPage from "./pages/checkout/checkout.component";
 import Header from "./components/header/header.component";
-import { HomePage } from "./pages/homepage/homepage.component";
+import HomePage from "./pages/homepage/homepage.component";
 import { SignUpAndSignIn } from "./pages/sign-up-and-sign-in/sign-up-and-sign-in.component";
 
 import "./App.css";
+import WithSpinner from "./components/with-spinner/with-spinner.component";
+
+const HomePageWithSpinner = WithSpinner(HomePage);
+const ShopPageWithSpinner = WithSpinner(ShopPage);
 
 class App extends React.Component {
-  unsubscribeFromAuthChanged = null;
-  unsubscribeFromCollections = null;
+  constructor() {
+    super();
+    this.state = {
+      isLoading: true,
+    };
+
+    this.unsubscribeFromAuthChanged = null;
+    this.unsubscribeFromCollections = null;
+  }
 
   componentDidMount() {
     const collectionRef = collection(firestore, "collections");
@@ -35,6 +46,7 @@ class App extends React.Component {
         const collectionsObject =
           convertCollectionsSnapshotToObject(collectionsSnapshot);
         this.props.loadCollections(collectionsObject);
+        this.setState({ isLoading: false });
       }
     );
 
@@ -54,8 +66,6 @@ class App extends React.Component {
         }
 
         onSnapshot(userRef, (snapshot) => {
-          console.log("snapshopt data");
-          console.log(snapshot.data());
           setCurrentUser({ id: userRef.id, ...snapshot.data() });
         });
       }
@@ -64,6 +74,7 @@ class App extends React.Component {
 
   componentWillUnmount() {
     this.unsubscribeFromAuthChanged();
+    this.unsubscribeFromCollections();
   }
 
   render() {
@@ -77,8 +88,24 @@ class App extends React.Component {
               this.props.currentUser ? <Navigate to='/' /> : <SignUpAndSignIn />
             }
           />
-          <Route path='/' element={<HomePage />} />
-          <Route path='/shop/*' element={<ShopPage />} />
+          <Route
+            path='/'
+            element={
+              <HomePageWithSpinner
+                isLoading={this.state.isLoading}
+                {...this.props}
+              />
+            }
+          />
+          <Route
+            path='/shop/*'
+            element={
+              <ShopPageWithSpinner
+                isLoading={this.state.isLoading}
+                {...this.props}
+              />
+            }
+          />
           <Route path='/checkout' element={<CheckoutPage />} />
         </Routes>
       </div>
@@ -89,6 +116,5 @@ class App extends React.Component {
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
 });
-export default connect(mapStateToProps, { setCurrentUser, loadCollections })(
-  App
-);
+const mapDispatchToProps = { setCurrentUser, loadCollections };
+export default connect(mapStateToProps, mapDispatchToProps)(App);
