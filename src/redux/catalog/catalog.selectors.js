@@ -18,3 +18,8 @@ export const selectCollection = (collectionName) =>
     [selectCatalogCollections],
     (sections) => sections[collectionName.toLowerCase()]
   );
+
+export const selectIsFetchingCollection = createSelector(
+  [selectCatalog],
+  (catalog) => catalog.isFetchingCollections
+);
