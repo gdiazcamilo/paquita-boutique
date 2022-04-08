@@ -6,29 +6,31 @@ import {
   convertCollectionsSnapshotToObject,
 } from "../../firebase/firebase.utils";
 
-const loadCollectionsStart = () => ({
+export const loadCollectionsStart = () => ({
   type: CartTypes.LOAD_COLLECTIONS_START,
 });
-const loadCollectionsSuccess = (collections) => ({
+export const loadCollectionsSuccess = (collections) => ({
   type: CartTypes.LOAD_COLLECTIONS_SUCCESS,
   payload: collections,
 });
-const loadCollectionsFail = (errorMessage) => ({
+export const loadCollectionsFail = (errorMessage) => ({
   type: CartTypes.LOAD_COLLECTIONS_FAIL,
   payload: errorMessage,
 });
 
 export const loadCollections = () => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(loadCollectionsStart());
 
     const collectionRef = collection(firestore, "collections");
 
-    getDocs(collectionRef)
-      .then((snapshot) => {
-        const collections = convertCollectionsSnapshotToObject(snapshot);
-        dispatch(loadCollectionsSuccess(collections));
-      })
-      .catch((error) => dispatch(loadCollectionsFail(error.message)));
+    try {
+      const collectionSnapshot = await getDocs(collectionRef);
+      const collections =
+        convertCollectionsSnapshotToObject(collectionSnapshot);
+      dispatch(loadCollectionsSuccess(collections));
+    } catch (error) {
+      dispatch(loadCollectionsFail(error.message));
+    }
   };
 };

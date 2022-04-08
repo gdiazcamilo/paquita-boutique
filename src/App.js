@@ -7,7 +7,7 @@ import { createStructuredSelector } from "reselect";
 
 import { selectCurrentUser } from "./redux/user/user.selectors";
 import { setCurrentUser } from "./redux/user/user.actions";
-import { loadCollections } from "./redux/catalog/catalog.actions";
+import { loadCollectionsStart } from "./redux/catalog/catalog.actions";
 
 import { authorizer, saveUser } from "./firebase/firebase.utils";
 
@@ -80,5 +80,8 @@ class App extends React.Component {
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
 });
-const mapDispatchToProps = { setCurrentUser, loadCollections };
+const mapDispatchToProps = {
+  setCurrentUser,
+  loadCollections: loadCollectionsStart,
+};
 export default connect(mapStateToProps, mapDispatchToProps)(App);
