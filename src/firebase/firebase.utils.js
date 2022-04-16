@@ -1,13 +1,12 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import {
-  getFirestore,
-  collection,
-  getDocs,
-  getDoc,
-  doc,
-  setDoc,
-} from "firebase/firestore";
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword as signInWithEmailAndPasswordDb,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+import { getFirestore, getDoc, doc, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD-sLfv2pw69_Brl7i5sFl36xtkk_zNmTU",
@@ -23,10 +22,26 @@ export const app = initializeApp(firebaseConfig);
 export const authorizer = getAuth();
 export const firestore = getFirestore();
 
-const googleProvider = new GoogleAuthProvider();
+export const signInWithEmailAndPassword = (email, password) =>
+  signInWithEmailAndPasswordDb(authorizer, email, password);
 
+const googleProvider = new GoogleAuthProvider();
 export const signInWithGooglePopUp = () =>
   signInWithPopup(authorizer, googleProvider);
+
+export const checkUserIsAuthenticated = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribeFromAuthChanged = authorizer.onAuthStateChanged(
+      (userAuth) => {
+        unsubscribeFromAuthChanged();
+        resolve(userAuth);
+      },
+      reject
+    );
+  });
+};
+
+export const signOut = () => authorizer.signOut();
 
 export const saveUser = async (userAuth, additionalData) => {
   if (!userAuth) {
@@ -57,10 +72,12 @@ export const saveUser = async (userAuth, additionalData) => {
   }
 };
 
+export const createUser = (email, password) =>
+  createUserWithEmailAndPassword(authorizer, email, password);
+
 export const convertCollectionsSnapshotToObject = (collectionsSnapshot) => {
   const collectionsList = collectionsSnapshot.docs.map((collection) => {
     const { title, imageUrl, items, size } = collection.data();
-    console.log(title);
     return {
       id: collection.id,
       title: title,
@@ -77,21 +94,21 @@ export const convertCollectionsSnapshotToObject = (collectionsSnapshot) => {
   }, {});
 };
 
-const getUser = async () => {
-  const specificUserQuery = doc(firestore, "users", "Icj0gbfklh61wa3ARgmb");
-  console.log(specificUserQuery);
-  const user = await getDoc(specificUserQuery);
-  console.log(user);
-  console.log(user.data());
+// const getUser = async () => {
+//   const specificUserQuery = doc(firestore, "users", "Icj0gbfklh61wa3ARgmb");
+//   console.log(specificUserQuery);
+//   const user = await getDoc(specificUserQuery);
+//   console.log(user);
+//   console.log(user.data());
 
-  const allUsersQuery = collection(firestore, "users");
-  const allUsers = await getDocs(allUsersQuery);
-  allUsers.forEach((u) => console.log(u.data()));
+//   const allUsersQuery = collection(firestore, "users");
+//   const allUsers = await getDocs(allUsersQuery);
+//   allUsers.forEach((u) => console.log(u.data()));
 
-  const specificCartItemQuery = doc(
-    firestore,
-    "users/Icj0gbfklh61wa3ARgmb/cartItems/16bvKwgsB72ZY7Fe9OP2"
-  );
-  const cartItem = await getDoc(specificCartItemQuery);
-  console.log(cartItem.data());
-};
+//   const specificCartItemQuery = doc(
+//     firestore,
+//     "users/Icj0gbfklh61wa3ARgmb/cartItems/16bvKwgsB72ZY7Fe9OP2"
+//   );
+//   const cartItem = await getDoc(specificCartItemQuery);
+//   console.log(cartItem.data());
+// };

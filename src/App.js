@@ -2,14 +2,11 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { onSnapshot } from "firebase/firestore";
 import { createStructuredSelector } from "reselect";
 
 import { selectCurrentUser } from "./redux/user/user.selectors";
-import { setCurrentUser } from "./redux/user/user.actions";
+import { checkSignIn } from "./redux/user/user.actions";
 import { loadCollectionsStart } from "./redux/catalog/catalog.actions";
-
-import { authorizer, saveUser } from "./firebase/firebase.utils";
 
 import WithSpinnerContainer from "./components/with-spinner/with-spinner.container.component";
 import HomePageContainer from "./pages/homepage/homepage.container.component";
@@ -30,32 +27,33 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const { setCurrentUser, loadCollections } = this.props;
+    const { loadCollections, checkSignIn } = this.props;
 
+    checkSignIn();
     loadCollections();
 
-    this.unsubscribeFromAuthChanged = authorizer.onAuthStateChanged(
-      async (userAuth) => {
-        if (!userAuth) {
-          setCurrentUser(null);
-          return;
-        }
+    // this.unsubscribeFromAuthChanged = authorizer.onAuthStateChanged(
+    //   async (userAuth) => {
+    //     if (!userAuth) {
+    //       setCurrentUser(null);
+    //       return;
+    //     }
 
-        const userRef = await saveUser(userAuth);
-        if (!userRef) {
-          setCurrentUser(null);
-          return;
-        }
+    //     const userRef = await saveUser(userAuth);
+    //     if (!userRef) {
+    //       setCurrentUser(null);
+    //       return;
+    //     }
 
-        onSnapshot(userRef, (snapshot) => {
-          setCurrentUser({ id: userRef.id, ...snapshot.data() });
-        });
-      }
-    );
+    //     onSnapshot(userRef, (snapshot) => {
+    //       setCurrentUser({ id: userRef.id, ...snapshot.data() });
+    //     });
+    //   }
+    // );
   }
 
   componentWillUnmount() {
-    this.unsubscribeFromAuthChanged();
+    // this.unsubscribeFromAuthChanged();
   }
 
   render() {
@@ -81,7 +79,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
 });
 const mapDispatchToProps = {
-  setCurrentUser,
   loadCollections: loadCollectionsStart,
+  checkSignIn,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);

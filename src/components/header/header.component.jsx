@@ -4,7 +4,7 @@ import { createStructuredSelector } from "reselect";
 
 import { selectCartVisible } from "../../redux/cart/cart.selectors";
 import { selectCurrentUser } from "../../redux/user/user.selectors";
-import { authorizer } from "../../firebase/firebase.utils";
+import { signOut } from "../../redux/user/user.actions";
 
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
 import CartIcon from "../cart-icon/cart-icon.component";
@@ -19,11 +19,11 @@ import {
   LinkOption,
 } from "./header.styles";
 
-const Header = ({ currentUser, visible }) => {
+const Header = ({ currentUser, visible, signOut }) => {
   function signInOption() {
     if (currentUser) {
       return (
-        <LinkOption as='div' onClick={() => authorizer.signOut()}>
+        <LinkOption as='div' onClick={() => signOut()}>
           SIGN OUT
         </LinkOption>
       );
@@ -54,4 +54,4 @@ const mapStateToProps = createStructuredSelector({
   visible: selectCartVisible,
 });
 
-export default connect(mapStateToProps, null)(Header);
+export default connect(mapStateToProps, { signOut })(Header);
