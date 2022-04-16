@@ -1,9 +1,10 @@
 import React from "react";
+import { connect } from "react-redux";
+
 import {
-  authorizer,
-  signInWithGooglePopUp,
-} from "../../firebase/firebase.utils";
-import { signInWithEmailAndPassword } from "firebase/auth";
+  signInWithGoogle,
+  signInWithEmailAndPassword,
+} from "../../redux/user/user.actions";
 
 import { FormInput } from "../form-input/form-input.component";
 import { CustomButton } from "../custom-button/custom-button.component";
@@ -28,13 +29,9 @@ class SignIn extends React.Component {
     event.preventDefault();
 
     const { email, password } = this.state;
+    const { signInWithEmailAndPassword } = this.props;
 
-    try {
-      await signInWithEmailAndPassword(authorizer, email, password);
-      this.setState({ email: "", password: "" });
-    } catch (error) {
-      alert("wrong email or password");
-    }
+    signInWithEmailAndPassword({ email, password });
   };
 
   render() {
@@ -63,7 +60,7 @@ class SignIn extends React.Component {
             <CustomButton
               type='button'
               isGoogleSignIn={true}
-              onClick={signInWithGooglePopUp}
+              onClick={this.props.signInWithGoogle}
             >
               Sign In with Google
             </CustomButton>
@@ -74,4 +71,5 @@ class SignIn extends React.Component {
   }
 }
 
-export default SignIn;
+const mapDispatchToProps = { signInWithGoogle, signInWithEmailAndPassword };
+export default connect(null, mapDispatchToProps)(SignIn);

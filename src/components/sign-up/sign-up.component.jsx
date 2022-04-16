@@ -1,7 +1,7 @@
 import React from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { connect } from "react-redux";
 
-import { authorizer, saveUser } from "../../firebase/firebase.utils";
+import { signUpStart } from "../../redux/user/user.actions";
 
 import { FormInput } from "../form-input/form-input.component";
 import { CustomButton } from "../custom-button/custom-button.component";
@@ -32,24 +32,7 @@ class SignUp extends React.Component {
       return;
     }
 
-    try {
-      const { user: userAuth } = await createUserWithEmailAndPassword(
-        authorizer,
-        email,
-        password
-      );
-
-      await saveUser(userAuth, { displayName });
-
-      this.setState({
-        displayName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    this.props.signUpStart(email, password, displayName);
   };
 
   render() {
@@ -98,4 +81,4 @@ class SignUp extends React.Component {
   }
 }
 
-export default SignUp;
+export default connect(null, { signUpStart })(SignUp);

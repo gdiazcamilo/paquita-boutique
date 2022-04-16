@@ -1,4 +1,4 @@
-import { takeEvery, call, put } from "redux-saga/effects";
+import { takeEvery, all, call, put } from "redux-saga/effects";
 import { getDocs, collection } from "firebase/firestore";
 
 import CatalogTypes from "./catalog.types";
@@ -26,6 +26,10 @@ function* fetchCollections() {
   }
 }
 
-export function* fetchCollectionsStart() {
+function* fetchCollectionsStart() {
   yield takeEvery(CatalogTypes.LOAD_COLLECTIONS_START, fetchCollections);
+}
+
+export function* catalogSagas() {
+  yield all([call(fetchCollectionsStart)]);
 }
