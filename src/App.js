@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { connect } from "react-redux";
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -19,61 +19,25 @@ import ShopPage from "./pages/shop/shop.component";
 
 const ShopPageWithSpinner = WithSpinnerContainer(ShopPage);
 
-class App extends React.Component {
-  constructor() {
-    super();
+const App = ({ checkSignIn, loadCollections, currentUser }) => {
+  useEffect(() => checkSignIn(), [checkSignIn]);
+  useEffect(() => loadCollections(), [loadCollections]);
 
-    this.unsubscribeFromAuthChanged = null;
-  }
-
-  componentDidMount() {
-    const { loadCollections, checkSignIn } = this.props;
-
-    checkSignIn();
-    loadCollections();
-
-    // this.unsubscribeFromAuthChanged = authorizer.onAuthStateChanged(
-    //   async (userAuth) => {
-    //     if (!userAuth) {
-    //       setCurrentUser(null);
-    //       return;
-    //     }
-
-    //     const userRef = await saveUser(userAuth);
-    //     if (!userRef) {
-    //       setCurrentUser(null);
-    //       return;
-    //     }
-
-    //     onSnapshot(userRef, (snapshot) => {
-    //       setCurrentUser({ id: userRef.id, ...snapshot.data() });
-    //     });
-    //   }
-    // );
-  }
-
-  componentWillUnmount() {
-    // this.unsubscribeFromAuthChanged();
-  }
-
-  render() {
-    const { currentUser } = this.props;
-    return (
-      <div>
-        <Header />
-        <Routes>
-          <Route
-            path='/sign-in'
-            element={currentUser ? <Navigate to='/' /> : <SignUpAndSignIn />}
-          />
-          <Route path='/' element={<HomePageContainer />} />
-          <Route path='/shop/*' element={<ShopPageWithSpinner />} />
-          <Route path='/checkout' element={<CheckoutPage />} />
-        </Routes>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <Header />
+      <Routes>
+        <Route
+          path='/sign-in'
+          element={currentUser ? <Navigate to='/' /> : <SignUpAndSignIn />}
+        />
+        <Route path='/' element={<HomePageContainer />} />
+        <Route path='/shop/*' element={<ShopPageWithSpinner />} />
+        <Route path='/checkout' element={<CheckoutPage />} />
+      </Routes>
+    </div>
+  );
+};
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
