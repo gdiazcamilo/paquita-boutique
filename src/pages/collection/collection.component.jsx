@@ -1,9 +1,8 @@
-import React from "react";
-import { connect, useSelector } from "react-redux";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 
+import CollectionContext from "../../contexts/collections/collections.context";
 import CollectionItem from "../../components/collection-item/collection-item.component";
-import { selectCollection } from "../../redux/catalog/catalog.selectors";
 
 import {
   CollectionPage as CollectionPageContainer,
@@ -13,9 +12,8 @@ import {
 
 const CollectionPage = () => {
   const params = useParams();
-  const collection = useSelector((state) =>
-    selectCollection(params.collectionName)(state)
-  );
+  const collections = useContext(CollectionContext);
+  const collection = collections[params.collectionName];
 
   if (collection) {
     return (
@@ -33,4 +31,4 @@ const CollectionPage = () => {
   }
 };
 
-export default connect()(CollectionPage);
+export default CollectionPage;

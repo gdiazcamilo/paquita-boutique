@@ -1,7 +1,6 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useContext } from "react";
 
-import { addItem } from "../../redux/cart/cart.actions";
+import CartContext from "../../contexts/cart/cart.context";
 
 import {
   CollectionItemContainer,
@@ -12,9 +11,9 @@ import {
   CollectionItemButton,
 } from "./collection-item.styles";
 
-const CollectionItem = ({ item, addItem }) => {
+const CollectionItem = ({ item }) => {
   const { name, price, imageUrl } = item;
-
+  const { addItem } = useContext(CartContext);
   return (
     <CollectionItemContainer>
       <ImageContainer className='image' imageUrl={imageUrl} />
@@ -29,4 +28,4 @@ const CollectionItem = ({ item, addItem }) => {
   );
 };
 
-export default connect(null, { addItem })(CollectionItem);
+export default CollectionItem;

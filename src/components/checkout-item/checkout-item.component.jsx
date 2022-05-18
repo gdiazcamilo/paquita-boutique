@@ -1,11 +1,5 @@
-import React from "react";
-import { connect } from "react-redux";
-
-import {
-  removeItem,
-  addItem,
-  decreaseItemQuantity,
-} from "../../redux/cart/cart.actions";
+import React, { useContext } from "react";
+import CartContext from "../../contexts/cart/cart.context";
 
 import {
   CheckoutItemContainer,
@@ -19,13 +13,10 @@ const UNICODE_X = "&#10005";
 const UNICODE_DOWN_ARROW = "&#10094";
 const UNICODE_UP_ARROW = "&#10095";
 
-const CheckoutItem = ({
-  cartItem,
-  removeItem,
-  addItem,
-  decreaseItemQuantity,
-}) => {
+const CheckoutItem = ({ cartItem }) => {
+  const { removeItem, addItem, decreaseItemQuantity } = useContext(CartContext);
   const { id, imageUrl, name, quantity, price } = cartItem;
+
   return (
     <CheckoutItemContainer>
       <ImageContainer>
@@ -52,6 +43,4 @@ const CheckoutItem = ({
   );
 };
 
-export default connect(null, { removeItem, addItem, decreaseItemQuantity })(
-  CheckoutItem
-);
+export default CheckoutItem;

@@ -1,11 +1,7 @@
-import React from "react";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { toggleCartPreview } from "../../redux/cart/cart.actions";
-import { selectCartItems } from "../../redux/cart/cart.selectors";
-
+import CartContext from "../../contexts/cart/cart.context";
 import CartDropdownItem from "../cart-dropdown-item/cart-dropdown-item.component";
 import { CustomButton } from "../custom-button/custom-button.component";
 
@@ -15,9 +11,9 @@ import {
   EmptyCartText,
 } from "./cart-dropdown.styles";
 
-const CartDropdown = ({ cartItems, dispatch }) => {
+const CartDropdown = () => {
   const navigate = useNavigate();
-  console.log(toggleCartPreview);
+  const { cartItems, toggleCartPreview } = useContext(CartContext);
 
   const renderCartItems = (cartItems) => {
     if (cartItems.length) {
@@ -37,7 +33,7 @@ const CartDropdown = ({ cartItems, dispatch }) => {
       <CustomButton
         onClick={() => {
           navigate("/checkout");
-          dispatch(toggleCartPreview());
+          toggleCartPreview();
         }}
       >
         SHOW ALL
@@ -46,7 +42,4 @@ const CartDropdown = ({ cartItems, dispatch }) => {
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  cartItems: selectCartItems,
-});
-export default connect(mapStateToProps, null)(CartDropdown);
+export default CartDropdown;

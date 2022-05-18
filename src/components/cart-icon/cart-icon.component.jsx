@@ -1,9 +1,5 @@
-import React from "react";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
-
-import { selectCartItemCount } from "../../redux/cart/cart.selectors";
-import { toggleCartPreview } from "../../redux/cart/cart.actions";
+import React, { useContext } from "react";
+import CartContext from "../../contexts/cart/cart.context";
 
 import ShoppingBagIcon from "./shopping-bag.svg";
 import {
@@ -12,18 +8,14 @@ import {
   CartIconContainer,
 } from "./cart-icon.styles";
 
-const CartIcon = ({ toggleCartPreview, itemCount }) => (
-  <CartIconContainer onClick={toggleCartPreview}>
-    <ShoppingIcon src={ShoppingBagIcon} alt='[  ]' />
-    <ItemCountText>{itemCount}</ItemCountText>
-  </CartIconContainer>
-);
-
-const mapStateToProps = createStructuredSelector({
-  itemCount: selectCartItemCount,
-});
-
-const mapDispatchToProps = {
-  toggleCartPreview: () => toggleCartPreview(),
+const CartIcon = () => {
+  const { toggleCartPreview, itemCount } = useContext(CartContext);
+  return (
+    <CartIconContainer onClick={toggleCartPreview}>
+      <ShoppingIcon src={ShoppingBagIcon} alt='[  ]' />
+      <ItemCountText>{itemCount}</ItemCountText>
+    </CartIconContainer>
+  );
 };
-export default connect(mapStateToProps, mapDispatchToProps)(CartIcon);
+
+export default CartIcon;

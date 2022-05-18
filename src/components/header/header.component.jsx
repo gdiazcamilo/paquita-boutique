@@ -1,10 +1,8 @@
-import React from "react";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
+import React, { useContext } from "react";
 
-import { selectCartVisible } from "../../redux/cart/cart.selectors";
-import { selectCurrentUser } from "../../redux/user/user.selectors";
 import { authorizer } from "../../firebase/firebase.utils";
+import CurrentUserContext from "../../contexts/current-user/current-user.context";
+import CartContext from "../../contexts/cart/cart.context";
 
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
 import CartIcon from "../cart-icon/cart-icon.component";
@@ -19,7 +17,10 @@ import {
   LinkOption,
 } from "./header.styles";
 
-const Header = ({ currentUser, visible }) => {
+const Header = () => {
+  const { visible } = useContext(CartContext);
+  const currentUser = useContext(CurrentUserContext);
+
   function signInOption() {
     if (currentUser) {
       return (
@@ -49,9 +50,4 @@ const Header = ({ currentUser, visible }) => {
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser,
-  visible: selectCartVisible,
-});
-
-export default connect(mapStateToProps, null)(Header);
+export default Header;
