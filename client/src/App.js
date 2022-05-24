@@ -14,7 +14,7 @@ import CheckoutPage from "./pages/checkout/checkout.component";
 import Header from "./components/header/header.component";
 import { SignUpAndSignIn } from "./pages/sign-up-and-sign-in/sign-up-and-sign-in.component";
 
-import "./App.css";
+import GlobalStyles from "./global.styles";
 import ShopPage from "./pages/shop/shop.component";
 
 const ShopPageWithSpinner = WithSpinnerContainer(ShopPage);
@@ -25,6 +25,7 @@ const App = ({ checkSignIn, loadCollections, currentUser }) => {
 
   return (
     <div>
+      <GlobalStyles />
       <Header />
       <Routes>
         <Route
