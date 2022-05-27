@@ -5,9 +5,11 @@ import SignUp from "../../components/sign-up/sign-up.component";
 
 import { SignInAndSignUpContainer } from "./sign-in-and-sign-up.styles";
 
-export const SignUpAndSignIn = () => (
+const SignUpAndSignIn = () => (
   <SignInAndSignUpContainer>
     <SignIn />
     <SignUp />
   </SignInAndSignUpContainer>
 );
+
+export default SignUpAndSignIn;
