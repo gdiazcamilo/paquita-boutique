@@ -43,6 +43,30 @@ export const checkUserIsAuthenticated = () => {
 
 export const signOut = () => authorizer.signOut();
 
+export const fetchCartFromDb = async (userId) => {
+  if (!userId) {
+    return [];
+  }
+
+  const userRef = doc(firestore, "users", userId);
+  const user = await getDoc(userRef);
+  if (!user.exists()) {
+    return [];
+  }
+
+  return user.data().cartItems || [];
+};
+
+export const updateCartInDb = async (userId, cartItems) => {
+  if (!userId) {
+    return;
+  }
+
+  const userRef = doc(firestore, "users", userId);
+  const userInDb = await getDoc(userRef);
+  await setDoc(userRef, { ...userInDb.data(), cartItems });
+};
+
 export const saveUser = async (userAuth, additionalData) => {
   if (!userAuth) {
     return null;

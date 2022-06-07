@@ -4,6 +4,7 @@ const CartTypes = {
   REMOVE_ITEM: "REMOVE_ITEM",
   DECREASE_ITEM_QUANTITY: "DECREASE_ITEM_QUANTITY",
   CLEAR_CART: "CLEAR_CART",
+  LOAD_CART: "LOAD_CART",
 };
 
 export default CartTypes;
