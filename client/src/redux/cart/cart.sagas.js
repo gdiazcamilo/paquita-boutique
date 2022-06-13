@@ -21,7 +21,6 @@ function* updateCart() {
 }
 
 function* fetchCartItems() {
-  console.log("fetch cart items");
   const user = yield select(selectCurrentUser);
   if (!user) {
     return;
