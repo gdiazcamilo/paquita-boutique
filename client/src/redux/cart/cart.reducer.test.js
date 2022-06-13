@@ -30,7 +30,7 @@ it("add new item to cart", () => {
 
   expect(
     cartReducer(initialState, cartActions.addItem(newItem)).cartItems.find(
-      (i) => i === newItem.id
+      (i) => i.id === newItem.id
     )
   ).toBeDefined();
 });
@@ -43,6 +43,21 @@ it("add set quantity to 1 for newly added items to cart", () => {
   ).toBeUndefined();
 
   expect(
-    cartReducer(initialState, cartActions.addItem(newItem)).cartItems[0].id
+    cartReducer(initialState, cartActions.addItem(newItem)).cartItems[0]
   ).toEqual({ ...newItem, quantity: 1 });
+});
+
+it("increases quantity when item is in the cart", () => {
+  initialState.cartItems.push({
+    id: 1,
+    name: "hat",
+    price: 22.0,
+    quantity: 1,
+  });
+
+  const newState = cartReducer(
+    initialState,
+    cartActions.addItem({ id: 1, name: "hat", price: 22.0 })
+  );
+  expect(newState.cartItems.find((i) => i.id === 1).quantity).toBe(2);
 });
