@@ -1,10 +1,14 @@
 import cartReducer from "./cart.reducer";
 import * as cartActions from "./cart.actions";
 
-const initialState = {
-  visible: false,
-  cartItems: [],
-};
+let initialState = {};
+
+beforeEach(() => {
+  initialState = {
+    visible: false,
+    cartItems: [],
+  };
+});
 
 it("shows cart preview when hidden", () => {
   expect(
@@ -60,4 +64,44 @@ it("increases quantity when item is in the cart", () => {
     cartActions.addItem({ id: 1, name: "hat", price: 22.0 })
   );
   expect(newState.cartItems.find((i) => i.id === 1).quantity).toBe(2);
+});
+
+it("remove item with quantity greater than 1 from cart", () => {
+  initialState.cartItems.push({
+    id: 1,
+    name: "hat",
+    price: 22.0,
+    quantity: 3,
+  });
+
+  expect(initialState.cartItems.find((i) => i.id === 1)).toBeDefined();
+
+  const newState = cartReducer(initialState, cartActions.removeItem(1));
+
+  expect(newState.cartItems.find((i) => i.id === 1)).toBeUndefined();
+});
+
+it("decrease item quantity", () => {
+  initialState.cartItems.push({
+    id: 1,
+    name: "hat",
+    price: 22.0,
+    quantity: 3,
+  });
+
+  const newState = cartReducer(
+    initialState,
+    cartActions.decreaseItemQuantity(1)
+  );
+
+  expect(newState.cartItems.find((i) => i.id === 1).quantity).toBe(2);
+});
+
+it("clear cart", () => {
+  initialState.cartItems.push({ id: 1 });
+  initialState.cartItems.push({ id: 2 });
+
+  expect(
+    cartReducer(initialState, cartActions.clearCart()).cartItems.length
+  ).toBe(0);
 });
