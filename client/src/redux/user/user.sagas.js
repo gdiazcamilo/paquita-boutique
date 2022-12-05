@@ -40,6 +40,7 @@ function* signInWithEmailAndPasswordSagas({ payload: { email, password } }) {
       email,
       password
     );
+    // console.log(userAuth);
     yield signInToState(userAuth);
   } catch (error) {
     console.log("An error ocurred: ", error);

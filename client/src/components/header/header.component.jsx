@@ -6,7 +6,7 @@ import { selectCartVisible } from "../../redux/cart/cart.selectors";
 import { selectCurrentUser } from "../../redux/user/user.selectors";
 import { signOut } from "../../redux/user/user.actions";
 
-import CartDropdown from "../cart-dropdown/cart-dropdown.component";
+import CartDropdown from "../cart-dropdown/cart-dropdown.connected.component";
 import CartIcon from "../cart-icon/cart-icon.component";
 import Logo from "./paquita.logo.jpg";
 // import { ReactComponent as Logo } from "./crown.svg";

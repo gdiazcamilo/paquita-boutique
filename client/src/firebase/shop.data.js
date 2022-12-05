@@ -165,6 +165,7 @@ const SHOP_DATA = {
     size: "large",
     linkUrl: "shop/womens",
     routeName: "womens",
+    size: "large",
     items: [
       {
         id: 23,
@@ -217,6 +218,7 @@ const SHOP_DATA = {
     size: "large",
     linkUrl: "shop/mens",
     routeName: "mens",
+    size: "large",
     items: [
       {
         id: 30,
@@ -258,4 +260,4 @@ const SHOP_DATA = {
   },
 };
 
-export default SHOP_DATA;
+module.exports = SHOP_DATA;

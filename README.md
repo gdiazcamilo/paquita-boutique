@@ -1,74 +1,70 @@
 # paquita-boutique
 
-Ecommerce website built with React
+This is an e-commerce website built with React, Redux, React Router DOM, Redux-saga, Styled components, Firebase authentication, Firestore for data store and Stripe integration for payments.
 
-# Getting Started with Create React App
+Go to Firebase, create a new Firebase Project, once project is ready, create a Firestore database, Go to project settings > General and Add a Web App, then copy the generated configuration, it's an object with the following properties:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+const firebaseConfig = {
+apiKey: "",
+authDomain: "",
+projectId: "",
+storageBucket: "",
+messagingSenderId: "",
+appId: "",
+measurementId: ""
+};
 
-## Available Scripts
+Create a new file "firebase.conf.dev.mjs" in client/firabase.
+Copy/paste the firebase config into that file (make sure to export the object as default).
 
-In the project directory, you can run:
+Up to this point the application should work except for the authentication.
 
-### `npm start`
+Setting up Authentication - SSO with Google
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+In the firebase console:
+Go to your project
+Go to Build > Authentication
+Click "Get Started" or Go to the "Sign-in method" tab.
+Click "Add new provider" and choose Google.
+Click Enable and Save.
+Done.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Setting Up Authentication - Email and Password
 
-### `npm test`
+In the firebase console:
+Go to your project
+Go to Build > Authentication
+Click "Get Started" or Go to the "Sign-in method" tab.
+Click "Add new provider" and choose "Email/Password".
+Click Enable and Save.
+Done.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Setting up Stripe
 
-### `npm run build`
+Go to the stripe-button.component.jsx and update the `publishableKey` to the key provided by Stripe.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Go to the server folder, create a .env file with the key `STRIPE_SECRET_KEY` and set it to the secret key provided by Stripe.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Start the app
+The backend is only use for Stripe payments. The client will work independently except for the Stripe payments.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Run migration
 
-### `npm run eject`
+cd client
+npm run data:import
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+If you don't run migrations you won't see anything except for the Header.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Start the client
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+cd client
+npm start
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Start the server
 
-## Learn More
+cd server
+npm start
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Start both client and server with single command
+In the root project folder run:
+npm run dev
