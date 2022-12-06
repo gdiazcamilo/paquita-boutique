@@ -10,12 +10,6 @@ import userEvent from "@testing-library/user-event";
 import CartDropdownWrapper from "./cart-dropdown.connected.component";
 import Header from "../header/header.component";
 
-// jest.mock("../cart-dropdown-item/cart-dropdown-item.component", () => {
-//   return function DummyCartItem({item: { id }}) {
-//     return <div data-testid={id}>cart item detail</div>;
-//   };
-// });
-
 describe("cart dropdown component", () => {
   it("show empty cart message when no items", () => {
     renderWithProviders(
@@ -57,7 +51,7 @@ describe("cart dropdown component", () => {
     expect(screen.getByText(cartItems[1].name)).toBeInTheDocument();
   });
 
-  it("toggles cart preview visibility", () => {
+  it("cart preview hides when click 'Show All' button", () => {
     const cartItem = {
       id: 1,
       name: "Red hat",
@@ -66,7 +60,7 @@ describe("cart dropdown component", () => {
       imageUrl: "red_hat.png",
     };
 
-    const { store } = renderWithProviders(
+    renderWithProviders(
       <router.MemoryRouter>
         {/* <CartDropdownWrapper /> */}
         <Header />
@@ -82,9 +76,7 @@ describe("cart dropdown component", () => {
     );
 
     expect(screen.getByText("Red hat")).toBeInTheDocument();
-
     userEvent.click(screen.getByRole("button"));
-
     expect(screen.queryByText("Red hat")).toBeNull();
   });
 });

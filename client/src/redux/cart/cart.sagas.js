@@ -12,10 +12,14 @@ export function* clearCartSagas() {
 }
 
 export function* updateCart() {
-  const cartItems = yield select(selectCartItems);
-  const user = yield select(selectCurrentUser);
+  try {
+    const cartItems = yield select(selectCartItems);
+    const user = yield select(selectCurrentUser);
 
-  yield call(updateCartInDb, user.id, cartItems);
+    yield call(updateCartInDb, user.id, cartItems);
+  } catch (error) {
+    console.error("An error ocurred: ", error);
+  }
 }
 
 export function* fetchCartItems() {
