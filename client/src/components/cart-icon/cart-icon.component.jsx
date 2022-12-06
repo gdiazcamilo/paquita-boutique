@@ -14,7 +14,7 @@ import {
 
 const CartIcon = ({ toggleCartPreview, itemCount }) => (
   <CartIconContainer onClick={toggleCartPreview}>
-    <ShoppingIcon src={ShoppingBagIcon} alt='[  ]' />
+    <ShoppingIcon src={ShoppingBagIcon} alt={`[ ${itemCount} ]`} />
     <ItemCountText>{itemCount}</ItemCountText>
   </CartIconContainer>
 );
