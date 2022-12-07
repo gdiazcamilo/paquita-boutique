@@ -1,16 +1,14 @@
 import { MemoryRouter } from "react-router-dom";
+import { Route, Router, Routes } from "react-router";
+import { createMemoryHistory } from "history";
+import userEvent from "@testing-library/user-event";
+
 import { screen, renderWithProviders, render } from "test-utils/test-utils";
+
 import { CollectionPreview } from "./collection-preview.component";
+import { scryRenderedComponentsWithType } from "react-dom/test-utils";
 
 describe("collection-preview shows a preview of the items in the collection", () => {
-  const collection = [
-    { id: 1, name: "Blue jacket", price: 39.99 },
-    { id: 2, name: "Leather jacket", price: 69.99 },
-    { id: 3, name: "Jean jacket", price: 59.99 },
-    { id: 4, name: "Black hoodie", price: 39.99 },
-    { id: 5, name: "Brown jacket", price: 39.99 },
-  ];
-
   it("renders anchor with collection link and name", () => {
     render(
       <MemoryRouter>
@@ -24,6 +22,14 @@ describe("collection-preview shows a preview of the items in the collection", ()
   });
 
   it("limits the preview to 4 items", () => {
+    const collection = [
+      { id: 1, name: "Blue jacket", price: 39.99 },
+      { id: 2, name: "Leather jacket", price: 69.99 },
+      { id: 3, name: "Jean jacket", price: 59.99 },
+      { id: 4, name: "Black hoodie", price: 39.99 },
+      { id: 5, name: "Brown jacket", price: 39.99 },
+    ];
+
     renderWithProviders(
       <MemoryRouter>
         <CollectionPreview
@@ -40,5 +46,24 @@ describe("collection-preview shows a preview of the items in the collection", ()
     }
 
     expect(screen.queryByText(collection[i])).toBeNull();
+  });
+
+  it("goes to collection page when click the collection link", () => {
+    render(
+      <MemoryRouter initialEntries={["/shop"]}>
+        <Routes>
+          <Route path='/shop/jackets' element={<h1>Jackets shop page</h1>} />
+          <Route
+            path='/shop'
+            element={
+              <CollectionPreview title='jackets' linkUrl='jackets' items={[]} />
+            }
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    userEvent.click(screen.getByRole("link", { name: /jacket/i }));
+    expect(screen.getByText("Jackets shop page")).toBeInTheDocument();
   });
 });
