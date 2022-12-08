@@ -28,7 +28,7 @@ function renderWithProviders(
   } = {}
 ) {
   function Wrapper({ children }) {
-    return withProviders(children, preloadedState, store);
+    return withProviders(children, { preloadedState, store });
   }
 
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
