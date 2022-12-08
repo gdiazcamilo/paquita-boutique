@@ -50,5 +50,5 @@ export const AppFormInputLabel = styled.label`
   top: 10px;
   transition: 300ms ease all;
 
-  ${(props) => (props.value.length > 0 ? labelShrinked : "")}
+  ${(props) => (props.value?.length > 0 ? labelShrinked : "")}
 `;

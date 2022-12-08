@@ -7,9 +7,15 @@ import {
 
 export const FormInput = ({ label, handleChange, ...otherProps }) => (
   <GroupContainer>
-    <AppFormInput onChange={handleChange} {...otherProps}></AppFormInput>
+    <AppFormInput
+      id={label ? label.replace(" ", "-") : null}
+      onChange={handleChange}
+      {...otherProps}
+    ></AppFormInput>
     {label ? (
-      <AppFormInputLabel {...otherProps}>{label}</AppFormInputLabel>
+      <AppFormInputLabel htmlFor={label.replace(" ", "-")} {...otherProps}>
+        {label}
+      </AppFormInputLabel>
     ) : null}
   </GroupContainer>
 );

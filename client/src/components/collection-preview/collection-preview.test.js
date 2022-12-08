@@ -1,12 +1,10 @@
 import { MemoryRouter } from "react-router-dom";
-import { Route, Router, Routes } from "react-router";
-import { createMemoryHistory } from "history";
+import { Route, Routes } from "react-router";
 import userEvent from "@testing-library/user-event";
 
 import { screen, renderWithProviders, render } from "test-utils/test-utils";
 
 import { CollectionPreview } from "./collection-preview.component";
-import { scryRenderedComponentsWithType } from "react-dom/test-utils";
 
 describe("collection-preview shows a preview of the items in the collection", () => {
   it("renders anchor with collection link and name", () => {
@@ -52,13 +50,13 @@ describe("collection-preview shows a preview of the items in the collection", ()
     render(
       <MemoryRouter initialEntries={["/shop"]}>
         <Routes>
-          <Route path='/shop/jackets' element={<h1>Jackets shop page</h1>} />
           <Route
             path='/shop'
             element={
               <CollectionPreview title='jackets' linkUrl='jackets' items={[]} />
             }
           />
+          <Route path='/shop/jackets' element={<h1>Jackets shop page</h1>} />
         </Routes>
       </MemoryRouter>
     );

@@ -62,7 +62,7 @@ export const TextContainer = styled.div`
   position: absolute;
 `;
 
-export const Title = styled.h1`
+export const Title = styled.h2`
   font-weight: bold;
   margin-bottom: 6px;
   font-size: 22px;
